@@ -1,6 +1,3 @@
-import itertools
-
-
 def part1(puzzle):
     puzzle_compartments = [
         [item[: len(item) // 2], item[len(item) // 2 :]] for item in puzzle
@@ -38,6 +35,6 @@ def part2(puzzle):
 
 if __name__ == "__main__":
     with open("2022/inputs/input3", "r") as file:
-    # with open("2022/inputs/test_input", "r") as file:
+        # with open("2022/inputs/test_input", "r") as file:
         result = part2(file.read().splitlines())
     print(f"The result is: {result}")

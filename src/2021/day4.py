@@ -17,6 +17,29 @@ def part1(puzzle):
     return result
 
 
+def part2(puzzle):
+    boards = get_boards(puzzle)
+    list_draw = get_list_draw(puzzle)
+    for nb_draw in list_draw:
+        for board in boards:
+            print(boards)
+            board = check_nb(board, nb_draw)
+            status_h = check_if_win(board)
+            vertical_board = transform_vertical(board)
+            status_v = check_if_win(vertical_board)
+            if status_h or status_v:
+                boards.remove(board)
+                if len(boards) == 1:
+                    sum_unmark = sum_unmarked(board)
+                    break
+            else:
+                continue
+            break
+        break
+    result = sum_unmark * int(nb_draw)
+    return result
+
+
 def transform_input(puzzle):
     size = len(puzzle)
     idx_list = [idx + 1 for idx, val in enumerate(puzzle) if val == ""]
@@ -78,7 +101,6 @@ def transform_vertical(board):
         for el in board:
             new_line.append(el[i])
         new_vertical_board.append(new_line)
-    print(new_vertical_board)
     return new_vertical_board
 
 
@@ -92,7 +114,7 @@ def sum_unmarked(board):
 
 
 if __name__ == "__main__":
-    # with open("2021/inputs/test_input", "r") as file:
-    with open("2021/inputs/input4", "r") as file:
-        result = part1(file.read().split("\n"))
+    with open("2021/inputs/test_input", "r") as file:
+        # with open("2021/inputs/input4", "r") as file:
+        result = part2(file.read().split("\n"))
     print(f"The result is: {result}")

@@ -5,6 +5,50 @@ def part1(puzzle):
     return nb_trees
 
 
+def part2(puzzle):
+    vertical_puzzle = revert_puzzle(puzzle)
+    list_counters = []
+    for y, row in enumerate(puzzle):
+        max_h = max([int(tree) for tree in row])
+        list_counter_by_row = []
+        for x, tree in enumerate(row):
+            if int(tree) == max_h:
+                counter_1 = calculate_scenic_score(row[x + 1 :], max_h)
+                counter_2 = calculate_scenic_score(row[::-1][len(row) - x :], max_h)
+
+                idx = (len(row) - 1 - (y + 1), len(puzzle) - 1 - x)
+                counter_3 = calculate_scenic_score(
+                    (vertical_puzzle[idx[0]])[y:], max_h
+                )
+                counter_4 = calculate_scenic_score(
+                    (vertical_puzzle[idx[0]])[::-1][len(row) - y :],
+                    max_h,
+                )
+
+                counter = [counter_1, counter_2, counter_3, counter_4]
+                result_counter = multiply_counter(counter)
+                list_counter_by_row.append(result_counter)
+
+        list_counters.append(max(list_counter_by_row))
+    return max(list_counters)
+
+
+def calculate_scenic_score(row, max_h):
+    counter = 0
+    for tree in row:
+        if int(tree) < max_h:
+            counter += 1
+    return counter
+
+
+def multiply_counter(list_counter):
+    counter = [i for i in list_counter if i != 0]
+    result_counter = 1
+    for element in counter:
+        result_counter = result_counter * element
+    return result_counter
+
+
 def browse_line(puzzle):
     list_position = []
 
@@ -120,7 +164,7 @@ def update_row(row, max_h):
 
 
 if __name__ == "__main__":
-    with open("2022/inputs/input8", "r") as file:
-        # with open("2022/inputs/test_input", "r") as file:
-        result = part1(file.read().splitlines())
+    # with open("2022/inputs/input8", "r") as file:
+    with open("2022/inputs/test_input", "r") as file:
+        result = part2(file.read().splitlines())
     print(f"The result is: {result}")

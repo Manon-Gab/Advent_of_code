@@ -1,5 +1,6 @@
-def part1(puzzle):
+def create_filesystem(puzzle):
     directories = {}
+    size_directories = {}
     current_path = "/"
     for command in puzzle:
         if command[0] == "$":
@@ -12,6 +13,7 @@ def part1(puzzle):
                     else:
                         current_path = path
                     directories[current_path] = []
+                    size_directories[current_path] = []
                 else:
                     list_currant_path = current_path.split("/")
                     remove_last = list_currant_path[:-1]
@@ -19,18 +21,52 @@ def part1(puzzle):
         else:
             split_cmd = command.split(" ")
             if split_cmd[0] != "dir":
-                directories[current_path].append(split_cmd[0])
-    for keys in directories.keys():
-        if not keys.startswith("/"):
-            directories[f"/{keys}"] = directories.pop(keys)
-    return directories
+                size_directories[current_path].append(int(split_cmd[0]))
+            else:
+                directories[current_path].append("/".join([current_path, split_cmd[1]]))
+    new_directories = update_keys(directories)
+    new_size_directories = update_keys(size_directories)
+    new_size_directories = {
+        keys: sum(values) for keys, values in new_size_directories.items()
+    }
+    print(new_directories)
+    print(size_directories)
+    return new_directories, new_size_directories
 
 
-def create_size_folder(directories):
-    size_dir = {}
-    for keys, values in directories.items():
-        if "/" in keys[1:]:
-            all_dir = keys[1:].split("/")
+def update_keys(system_folder):
+    new_system_folder = {}
+    for key, value in system_folder.items():
+        if not key.startswith("/"):
+            new_system_folder[f"/{key}"] = value
+        else:
+            new_system_folder[key] = value
+    return new_system_folder
+
+
+def calcul_size(filesystem, size):
+    sum_filesystem = {}
+    for k, v in filesystem.items():
+        sum_filesystem[k] = [size[k]]
+        for folder in v:
+            if folder.startswith("//"):
+                folder = folder[1:]
+            elif not folder.startswith("/"):
+                folder = f"/{folder}"
+            sum_filesystem[k].append(size[folder])
+        sum_filesystem[k] = sum(sum_filesystem[k])
+    return sum_filesystem
+
+
+def part1(puzzle):
+    filesystem, size = create_filesystem(puzzle)
+    nested_size = calcul_size(filesystem, size)
+    list_size_inf_1000 = [value for value in nested_size.values() if value < 100000]
+    print(list_size_inf_1000)
+    return sum(list_size_inf_1000)
+
+    # if "/" in keys[1:]:
+    #     all_dir = keys[1:].split("/")
 
 
 # def parse_input(puzzle, filesystem):
@@ -166,7 +202,7 @@ def create_size_folder(directories):
 
 
 if __name__ == "__main__":
-    # with open("2022/inputs/input7", "r") as file:
-    with open("2022/inputs/test_input", "r") as file:
+    with open("2022/inputs/input7", "r") as file:
+        # with open("2022/inputs/test_input", "r") as file:
         result = part1(file.read().splitlines())
     print(f"The result is: {result}")

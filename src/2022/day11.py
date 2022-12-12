@@ -18,24 +18,22 @@ def part1(puzzle):
                     new = f"{item} {key['operation'][0]} {item}"
                 # Monkey gets bored with item
                 worry_level = int(eval(new) / 3)
+                # Count the number of times each monkey inspects items
+                inspected_items[f"Monkey {monkey}"] += 1
                 # send items
                 if worry_level % key["div"] == 0:
                     parse_monkeys_list[int(key["true"])][key["true"]]["items"].append(
                         worry_level
                     )
-                    # Count the number of times each monkey inspects items
-                    inspected_items[f"Monkey {int(key['true'])}"] += 1
                 else:
                     parse_monkeys_list[int(key["false"])][key["false"]]["items"].append(
                         worry_level
                     )
-                    # Count the number of times each monkey inspects items
-                    inspected_items[f"Monkey {int(key['false'])}"] += 1
             key["items"] = []
-
-    print(inspected_items)
-
-    # return json.dumps(parse_monkeys_list, indent=4)
+    # Find the 2 maximums
+    monkey_business = find_max(inspected_items)
+    result = monkey_business[0] * monkey_business[1]
+    return result
 
 
 def parse_monkey(monkeys_list):
@@ -75,8 +73,18 @@ def parse_input(puzzle):
     return monkeys_notes_list
 
 
+def find_max(inspected_items):
+    monkey_business = []
+    list_inspected_items = [values for values in inspected_items.values()]
+    for _ in range(2):
+        max_item = max(list_inspected_items)
+        monkey_business.append(max_item)
+        list_inspected_items.remove(max_item)
+    return monkey_business
+
+
 if __name__ == "__main__":
-    # with open("2022/inputs/input11", "r") as file:
-    with open("2022/inputs/test_input", "r") as file:
+    with open("2022/inputs/input11", "r") as file:
+    # with open("2022/inputs/test_input", "r") as file:
         result = part1(file.read().splitlines())
     print(f"The result is: {result}")

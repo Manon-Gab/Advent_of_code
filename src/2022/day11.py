@@ -5,26 +5,37 @@ from itertools import groupby
 def part1(puzzle):
     monkeys_list = parse_input(puzzle)
     parse_monkeys_list = parse_monkey(monkeys_list)
-    for monkey, turn in enumerate(parse_monkeys_list):
-        key = turn[str(monkey)]
-        for item in key["items"]:
-            try:
-                eval(key["operation"][1])
-                new = f"{item} {key['operation'][0]} {key['operation'][1]}"
-            except NameError:
-                new = f"{item} {key['operation'][0]} {item}"
-            worry_level = round(eval(new) / 3)
-            if worry_level % key["div"] == 0:
-                parse_monkeys_list[int(key["true"])][key["true"]]["items"].append(
-                    worry_level
-                )
-            else:
-                parse_monkeys_list[int(key["false"])][key["false"]]["items"].append(
-                    worry_level
-                )
-            parse_monkeys_list[monkey][str(monkey)]["items"].remove(item)
+    inspected_items = {f"Monkey {i}": 0 for i in range(len(parse_monkeys_list))}
+    for _ in range(20):
+        for monkey, turn in enumerate(parse_monkeys_list):
+            key = turn[str(monkey)]
+            for item in key["items"]:
+                # calculate worry level
+                try:
+                    eval(key["operation"][1])
+                    new = f"{item} {key['operation'][0]} {key['operation'][1]}"
+                except NameError:
+                    new = f"{item} {key['operation'][0]} {item}"
+                # Monkey gets bored with item
+                worry_level = int(eval(new) / 3)
+                # send items
+                if worry_level % key["div"] == 0:
+                    parse_monkeys_list[int(key["true"])][key["true"]]["items"].append(
+                        worry_level
+                    )
+                    # Count the number of times each monkey inspects items
+                    inspected_items[f"Monkey {int(key['true'])}"] += 1
+                else:
+                    parse_monkeys_list[int(key["false"])][key["false"]]["items"].append(
+                        worry_level
+                    )
+                    # Count the number of times each monkey inspects items
+                    inspected_items[f"Monkey {int(key['false'])}"] += 1
+            key["items"] = []
 
-    return json.dumps(parse_monkeys_list, indent=4)
+    print(inspected_items)
+
+    # return json.dumps(parse_monkeys_list, indent=4)
 
 
 def parse_monkey(monkeys_list):

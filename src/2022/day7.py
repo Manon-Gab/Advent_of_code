@@ -1,3 +1,24 @@
+def part1(puzzle):
+    filesystem = create_filesystem(puzzle)
+    nested_size = calcul_size(filesystem)
+    list_size_inf_1000 = [value for value in nested_size.values() if value < 100000]
+    return sum(list_size_inf_1000)
+
+
+def part2(puzzle):
+    filesystem = create_filesystem(puzzle)
+    nested_size = calcul_size(filesystem)
+    total_space = 70000000
+    use_space = max([size for size in nested_size.values()])
+    # List the directories that free up enough space
+    list_directories = [
+        size
+        for size in nested_size.values()
+        if total_space - use_space + size > 30000000
+    ]
+    return min(list_directories)
+
+
 def create_filesystem(puzzle):
     size_directories = {}
     current_path = []
@@ -29,15 +50,8 @@ def calcul_size(size):
     return {key: sum(value) for key, value in size.items()}
 
 
-def part1(puzzle):
-    filesystem = create_filesystem(puzzle)
-    nested_size = calcul_size(filesystem)
-    list_size_inf_1000 = [value for value in nested_size.values() if value < 100000]
-    return sum(list_size_inf_1000)
-
-
 if __name__ == "__main__":
     with open("2022/inputs/input7", "r") as file:
         # with open("2022/inputs/test_input", "r") as file:
-        result = part1(file.read().splitlines())
+        result = part2(file.read().splitlines())
     print(f"The result is: {result}")

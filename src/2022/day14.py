@@ -1,9 +1,5 @@
-import json
-
-
 def part1(puzzle):
     rock_paths = parse_puzzle(puzzle)
-    print(rock_paths)
     min_y, max_y, min_x, max_x = find_min_max(rock_paths)
     empty_scan = [["." for _ in range(max_y + 1)] for _ in range(max_x + 1)]
     # add base part
@@ -19,9 +15,51 @@ def part1(puzzle):
         new_rock_paths.append(add_to_path)
 
     scan = drawing_rock(scan, new_rock_paths)
-
+    try:
+        for _ in range(10000000):
+            for x in range(len(scan) - 1):
+                add_sand(scan, x, 500)
+    except IndexError:
+        pass
+    counter = 0
     for row in scan:
-        print(row[490:])
+        for unit in row:
+            if unit == "o":
+                counter += 1
+    # for row in scan:
+    #     print(row[490:515])
+    return counter
+
+
+def add_sand(scan, x, y):
+    if scan[x + 1][y] == ".":
+        return add_sand(scan, x + 1, y)
+
+    # Left edge management
+    elif y == 0 and scan[x + 1][y] != "." and scan[x + 1][y + 1] != ".":
+        scan[x][y] = "o"
+        return True
+
+    elif scan[x + 1][y] != "." and scan[x + 1][y - 1] == ".":
+        return add_sand(scan, x + 1, y - 1)
+
+    # Right edge management
+    elif y == len(scan[0]) and scan[x + 1][y - 1] != "." and scan[x + 1][y] != ".":
+        scan[x][y] = "o"
+        return True
+    elif (
+        scan[x + 1][y] != "."
+        and scan[x + 1][y - 1] != "."
+        and scan[x + 1][y + 1] == "."
+    ):
+        return add_sand(scan, x + 1, y + 1)
+    elif (
+        scan[x + 1][y] != "."
+        and scan[x + 1][y - 1] != "."
+        and scan[x + 1][y + 1] != "."
+    ):
+        scan[x][y] = "o"
+        return True
 
 
 def drawing_rock(scan, rock_paths):
@@ -68,7 +106,7 @@ def compare_two_coord(coord_1, coord_2):
 
 
 if __name__ == "__main__":
-    # with open("2022/inputs/input14", "r") as file:
-    with open("2022/inputs/test_input", "r") as file:
+    with open("2022/inputs/input14", "r") as file:
+        # with open("2022/inputs/test_input", "r") as file:
         result = part1(file.read().splitlines())
     print(f"The result is: {result}")

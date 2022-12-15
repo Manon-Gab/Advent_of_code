@@ -1,13 +1,17 @@
-def part1(puzzle):
+def part1_2(puzzle):
     rock_paths = parse_puzzle(puzzle)
     max_y, max_x = find_max(rock_paths)
-    empty_scan = [["." for _ in range(max_y + 1)] for _ in range(max_x + 1)]
+    # for part2
+    infini = max_y + 100000
+    empty_scan = [["." for _ in range(infini)] for _ in range(max_x + 3)]
     # complete rock path
     new_rock_paths = complete_rock_path(rock_paths)
     # drawing the scan
     scan = drawing_rock(empty_scan, new_rock_paths)
+    # add last row full rock for part 2
+    scan = drawing_rock_part_2(scan, max_x, infini)
     # add the units of sand in the scan
-    for _ in range(1000):
+    for _ in range(1000000):
         for x in range(len(scan)):
             try:
                 add_sand(scan, x, 500)
@@ -38,6 +42,12 @@ def drawing_rock(scan, rock_paths):
     for path in rock_paths:
         for coord in path:
             scan[coord[1]][coord[0]] = "#"
+    return scan
+
+
+def drawing_rock_part_2(scan, max_x, max_y):
+    for i in range(max_y - 1):
+        scan[max_x + 2][i] = "#"
     return scan
 
 
@@ -109,5 +119,5 @@ def count_units_of_sand(scan):
 if __name__ == "__main__":
     with open("2022/inputs/input14", "r") as file:
         # with open("2022/inputs/test_input", "r") as file:
-        result = part1(file.read().splitlines())
+        result = part1_2(file.read().splitlines())
     print(f"The result is: {result}")

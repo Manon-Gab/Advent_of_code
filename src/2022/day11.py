@@ -3,7 +3,7 @@ from itertools import groupby
 
 def part1(puzzle):
     monkeys_list = parse_input(puzzle)
-    parse_monkeys_list = parse_monkey(monkeys_list)
+    parse_monkeys_list, modulo = parse_monkey(monkeys_list)
     inspected_items = {f"Monkey {i}": 0 for i in range(len(parse_monkeys_list))}
     for _ in range(10000):
         for monkey, turn in enumerate(parse_monkeys_list):
@@ -16,7 +16,8 @@ def part1(puzzle):
                 except NameError:
                     new = f"{item} {key['operation'][0]} {item}"
                 # Monkey gets bored with item
-                worry_level = int(eval(new)) % 3
+                # part2 congruence
+                worry_level = eval(new) % modulo
                 # part1
                 # worry_level = int(eval(new) / 3)
                 # Count the number of times each monkey inspects items
@@ -39,6 +40,7 @@ def part1(puzzle):
 
 def parse_monkey(monkeys_list):
     parse_monkeys_list = []
+    modulo = 1
     for monkey, turn in enumerate(monkeys_list):
         key = f"{monkey}"
         monkey_dict = {key: {}}
@@ -50,6 +52,7 @@ def parse_monkey(monkeys_list):
         monkey_dict[key]["div"] = int(
             turn[f"Monkey {monkey}:"]["  Test"].split("by ")[1]
         )
+        modulo *= monkey_dict[key]["div"]
         monkey_dict[key]["true"] = turn[f"Monkey {monkey}:"]["    If true"].split(
             "monkey "
         )[1]
@@ -57,7 +60,7 @@ def parse_monkey(monkeys_list):
             "monkey "
         )[1]
         parse_monkeys_list.append(monkey_dict)
-    return parse_monkeys_list
+    return parse_monkeys_list, modulo
 
 
 def parse_input(puzzle):
@@ -77,6 +80,7 @@ def parse_input(puzzle):
 def find_max(inspected_items):
     monkey_business = []
     list_inspected_items = [values for values in inspected_items.values()]
+    print(list_inspected_items)
     for _ in range(2):
         max_item = max(list_inspected_items)
         monkey_business.append(max_item)

@@ -17,9 +17,7 @@ def part2(puzzle):
                 counter_2 = calculate_scenic_score(row[::-1][len(row) - x :], max_h)
 
                 idx = (len(row) - 1 - (y + 1), len(puzzle) - 1 - x)
-                counter_3 = calculate_scenic_score(
-                    (vertical_puzzle[idx[0]])[y:], max_h
-                )
+                counter_3 = calculate_scenic_score((vertical_puzzle[idx[0]])[y:], max_h)
                 counter_4 = calculate_scenic_score(
                     (vertical_puzzle[idx[0]])[::-1][len(row) - y :],
                     max_h,
@@ -165,6 +163,7 @@ def update_row(row, max_h):
 
 if __name__ == "__main__":
     # with open("2022/inputs/input8", "r") as file:
+    # result part2 172224
     with open("2022/inputs/test_input", "r") as file:
         result = part2(file.read().splitlines())
     print(f"The result is: {result}")

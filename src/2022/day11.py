@@ -5,7 +5,7 @@ def part1(puzzle):
     monkeys_list = parse_input(puzzle)
     parse_monkeys_list = parse_monkey(monkeys_list)
     inspected_items = {f"Monkey {i}": 0 for i in range(len(parse_monkeys_list))}
-    for _ in range(20):
+    for _ in range(10000):
         for monkey, turn in enumerate(parse_monkeys_list):
             key = turn[str(monkey)]
             for item in key["items"]:
@@ -16,7 +16,9 @@ def part1(puzzle):
                 except NameError:
                     new = f"{item} {key['operation'][0]} {item}"
                 # Monkey gets bored with item
-                worry_level = int(eval(new) / 3)
+                worry_level = int(eval(new)) % 3
+                # part1
+                # worry_level = int(eval(new) / 3)
                 # Count the number of times each monkey inspects items
                 inspected_items[f"Monkey {monkey}"] += 1
                 # send items

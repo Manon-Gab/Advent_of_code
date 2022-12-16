@@ -499,4 +499,5 @@ $RECYCLE.BIN/
 /src/**/inputs/test_input
 /src/**/test.py
 /src/config.json
+src/config.json
 /.idea/sonarlint/issuestore/index.pb

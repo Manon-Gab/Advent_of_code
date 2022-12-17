@@ -16,6 +16,7 @@ def part1(puzzle):
                 previous_pos = position
                 counter += 1
             else:
+                pass
                 # Find the same letter as before
     return positions
 

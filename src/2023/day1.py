@@ -22,7 +22,6 @@ def part2(puzzle):
         else:
             line = lines
         list_nb = [el for el in line if el.isdigit()]
-        print(int("".join([list_nb[0], list_nb[-1]])))
         list_calibation.append(int("".join([list_nb[0], list_nb[-1]])))
 
     return sum(list_calibation)
@@ -45,24 +44,22 @@ def part1(puzzle):
 #             return res[-1]
 
 
-def replace_letters(line, list_nb):
-    first = line.replace(list_nb[0], MAPPING[list_nb[0]])
-    second = first.replace(list_nb[-1], MAPPING[list_nb[-1]])
-    return second
+def replace_letters(line, dict_nb):
+    for index, nb in dict_nb.items():
+        line = line[:index] + MAPPING[nb] + line[index:]
+    return line
 
 
 def find_numbers(line):
-    res = []
+    res = {}
     for i in range(len(line)):
         if line[i:].startswith(tuple(LIST_NB)):
-            if line[i : i + 5] in LIST_NB:
-                res.append(line[i : i + 5])
-            elif line[i : i + 4] in LIST_NB:
-                res.append(line[i : i + 4])
-            elif line[i : i + 3] in LIST_NB:
-                res.append(line[i : i + 3])
-    if len(res) > 2:
-        res = [res[0], res[-1]]
+            if line[i: i + 5] in LIST_NB:
+                res[i + len(res)] = line[i: i + 5]
+            elif line[i: i + 4] in LIST_NB:
+                res[i + len(res)] = line[i: i + 4]
+            elif line[i: i + 3] in LIST_NB:
+                res[i + len(res)] = line[i: i + 3]
     return res
 
 
@@ -70,5 +67,3 @@ if __name__ == "__main__":
     with open("2023/inputs/input1", "r") as file:
         result = part2(file.read().splitlines())
     print(f"The result is: {result}")
-
-# 53270

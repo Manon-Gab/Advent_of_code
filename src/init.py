@@ -1,4 +1,10 @@
-"""Init the input + main python file: python init.py -y 2022 -d 1"""
+"""
+Init the script:
+add session cookie value in config.json
+=> inspect >> application >> Cookies >> select https://adventofcode.com/ and copy value
+Run in terminal:
+python init.py -y 2023 -d 1
+"""
 import os
 import requests
 import argparse

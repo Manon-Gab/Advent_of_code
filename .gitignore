@@ -500,5 +500,6 @@ $RECYCLE.BIN/
 /src/**/test.py
 /src/config.json
 **/config.json
+config.json
 /.idea/sonarlint/issuestore/index.pb
 

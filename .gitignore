@@ -498,6 +498,7 @@ $RECYCLE.BIN/
 # specific project
 /src/**/inputs/test_input
 /src/**/test.py
+src/config.json
 /src/config.json
 **/config.json
 config.json

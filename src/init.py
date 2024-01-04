@@ -6,6 +6,8 @@ Run in terminal:
 python init.py -y 2023 -d 1
 """
 import os
+import subprocess
+
 import requests
 import argparse
 import sys
@@ -29,6 +31,14 @@ def main(args=sys.argv[1:]):
         code = requests.get(url, headers=headers)
         open(f"{target_input_dir}/input{options.day}", "wb").write(code.content)
         shutil.copy(f"{work_dir}/base.py", f"{target_day_dir}/day{options.day}.py")
+        with open(f"{target_day_dir}/day{options.day}.py", "r") as target_file:
+            base = target_file.readlines()
+            base[5] = base[5].replace("year", options.year)
+            base[6] = base[6].replace("year", options.year)
+            base[5] = base[5].replace("input_nb", f"input{options.day}")
+            base_bytes = [line.encode("utf-8") for line in base]
+            with open(f"{target_day_dir}/day{options.day}.py", "wb") as save_file:
+                save_file.writelines(base_bytes)
 
 
 if __name__ == "__main__":

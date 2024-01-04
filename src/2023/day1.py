@@ -28,11 +28,11 @@ def part2(puzzle):
 
 
 def part1(puzzle):
-    list_calibation = []
+    list_calibration = []
     for line in puzzle:
         list_nb = [el for el in line if el.isdigit()]
-        list_calibation.append(int("".join([list_nb[0], list_nb[-1]])))
-    return sum(list_calibation)
+        list_calibration.append(int("".join([list_nb[0], list_nb[-1]])))
+    return sum(list_calibration)
 
 
 # def replace_letters(line, res, i):
@@ -54,12 +54,12 @@ def find_numbers(line):
     res = {}
     for i in range(len(line)):
         if line[i:].startswith(tuple(LIST_NB)):
-            if line[i: i + 5] in LIST_NB:
-                res[i + len(res)] = line[i: i + 5]
-            elif line[i: i + 4] in LIST_NB:
-                res[i + len(res)] = line[i: i + 4]
-            elif line[i: i + 3] in LIST_NB:
-                res[i + len(res)] = line[i: i + 3]
+            if line[i : i + 5] in LIST_NB:
+                res[i + len(res)] = line[i : i + 5]
+            elif line[i : i + 4] in LIST_NB:
+                res[i + len(res)] = line[i : i + 4]
+            elif line[i : i + 3] in LIST_NB:
+                res[i + len(res)] = line[i : i + 3]
     return res
 
 
